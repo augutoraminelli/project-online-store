@@ -6,7 +6,7 @@ class Home extends Component {
     return (
       <div>
         <form method="get">
-          <input type="text" placeholder="Digite seu texto aqui." />
+          <input type="text" placeholder="Digite seu texto aqui. " />
           <h3 data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </h3>
