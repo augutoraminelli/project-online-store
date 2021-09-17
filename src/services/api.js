@@ -1,17 +1,10 @@
-// feito em pair programming (Dandara, João Marcelo, Kristiano, Gabriella)
-const URL = 'https://api.mercadolibre.com/sites/MLB';
-
 export async function getCategories() {
   // Implemente aqui
-  const endpointApi = `${URL}/categories`;
-  const fetchApi = await fetch(endpointApi);
-  const data = await fetchApi.json();
-  return data;
+  return fetch('https://api.mercadolibre.com/sites/MLB/categories')
+    .then((data) => data.json());
 }
 
 export async function getProductsFromCategoryAndQuery(categoryId, query) {
-  // Implemente aqui! Quando o fizer, descomente os parâmetros que essa função recebe
-  const result = await fetch(`https://api.mercadolibre.com/sites/MLB/search?category=$${categoryId}q=$${query}`);
-  const data = await result.json();
-  return data;
+  return fetch(`https://api.mercadolibre.com/sites/MLB/search?category=${categoryId}&q=${query}`)
+    .then((data) => data.json());
 }
