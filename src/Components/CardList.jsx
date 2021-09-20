@@ -19,8 +19,9 @@ class CardList extends Component {
 
   // categoria genérica para testes
   async productList() {
-    const { productSearch } = this.props;
-    const productList = await getProductsFromCategoryAndQuery('MLB430637', productSearch);
+    const { categorySelected, productSearch } = this.props;
+    const productList = await
+    getProductsFromCategoryAndQuery(categorySelected, productSearch);
     this.setState({
       productList: ((productList) ? productList.results : []),
     });
@@ -48,6 +49,7 @@ class CardList extends Component {
 
 CardList.propTypes = {
   productSearch: PropTypes.string.isRequired,
+  categorySelected: PropTypes.string.isRequired,
 };
 
 export default CardList;

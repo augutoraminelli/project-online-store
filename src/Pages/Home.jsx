@@ -9,13 +9,23 @@ class Home extends Component {
     super();
 
     this.setSearch = this.setSearch.bind(this);
+    this.handleCategorySelected = this.handleCategorySelected.bind(this);
 
-    this.state = { isLoaded: false, arrayCategories: [], productSearch: '' };
+    this.state = {
+      isLoaded: false,
+      arrayCategories: [],
+      productSearch: '',
+      categorySelected: '',
+    };
   }
 
   componentDidMount() {
     getCategories()
       .then((response) => this.setState({ isLoaded: true, arrayCategories: response }));
+  }
+
+  handleCategorySelected({ target: { value } }) {
+    this.setState({ categorySelected: value });
   }
 
   setSearch(event) {
@@ -24,7 +34,7 @@ class Home extends Component {
   }
 
   render() {
-    const { isLoaded, arrayCategories, productSearch } = this.state;
+    const { isLoaded, arrayCategories, productSearch, categorySelected } = this.state;
     return (
       <div>
         <form method="get">
@@ -43,10 +53,16 @@ class Home extends Component {
           <Link to="/cart" data-testid="shopping-cart-button"><img alt="cart" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/000000/external-cart-grocery-flatart-icons-lineal-color-flatarticons.png" /></Link>
         </div>
         <div>
-          {isLoaded && <Categories arrayCategories={ arrayCategories } />}
+          {isLoaded && <Categories
+            handleCategorySelected={ this.handleCategorySelected }
+            arrayCategories={ arrayCategories }
+          />}
         </div>
         <div data-testid="query-button">
-          <CardList productSearch={ productSearch } />
+          {isLoaded && <CardList
+            categorySelected={ categorySelected }
+            productSearch={ productSearch }
+          />}
         </div>
       </div>
     );

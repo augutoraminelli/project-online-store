@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class Categories extends React.Component {
   render() {
-    const { arrayCategories } = this.props;
+    const { arrayCategories, handleCategorySelected } = this.props;
     return (
       <section>
         <ul>
@@ -12,6 +12,7 @@ class Categories extends React.Component {
             return (
               <div key={ id }>
                 <input
+                  onClick={ handleCategorySelected }
                   type="radio"
                   id={ id }
                   name="category"
@@ -29,6 +30,7 @@ class Categories extends React.Component {
 
 Categories.propTypes = {
   arrayCategories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleCategorySelected: PropTypes.func.isRequired,
 };
 
 export default Categories;
