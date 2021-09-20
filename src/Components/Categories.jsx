@@ -12,11 +12,11 @@ class Categories extends React.Component {
             return (
               <div key={ id }>
                 <input
-                  onClick={ handleCategorySelected }
+                  onChange={ handleCategorySelected }
                   type="radio"
                   id={ id }
                   name="category"
-                  value={ name }
+                  value={ id }
                   data-testid="category"
                 />
                 <label htmlFor={ id }>{ name }</label>

@@ -1,55 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import { Link } from 'react-router-dom';
 
 class CardList extends Component {
-  constructor() {
-    super();
-
-    this.productList = this.productList.bind(this);
-
-    this.state = {
-      productList: [],
-    };
-  }
-
-  componentDidMount() {
-    this.productList();
-  }
-
-  // categoria genérica para testes
-  async productList() {
-    const { categorySelected, productSearch } = this.props;
-    const productList = await
-    getProductsFromCategoryAndQuery(categorySelected, productSearch);
-    this.setState({
-      productList: ((productList) ? productList.results : []),
-    });
-  }
-
   render() {
-    const { productList } = this.state;
+    const { productList } = this.props;
     return (
       <div>
-        {(productList.length === 0) ? (
+        {(!productList) ? (
           <h4>Nenhum produto foi encontrado</h4>
         )
           : productList.map((product) => (
-            <section key={ product.id } data-testid="product">
-              <h4>
-                { product.title }
-              </h4>
-              <img src={ product.thumbnail } alt={ product.title } />
-              <h5>{ `R$ ${product.price}` }</h5>
-            </section>))}
+            <Link
+              to={ `product-details/${product.id}` }
+              key={ product.id }
+              data-testid="product-detail-link"
+            >
+              <section data-testid="product">
+                <h4>
+                  { product.title }
+                </h4>
+                <img src={ product.thumbnail } alt={ product.title } />
+                <h5>{ `R$ ${product.price}` }</h5>
+              </section>
+            </Link>))}
       </div>
     );
   }
 }
 
 CardList.propTypes = {
-  productSearch: PropTypes.string.isRequired,
-  categorySelected: PropTypes.string.isRequired,
+  productList: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default CardList;
