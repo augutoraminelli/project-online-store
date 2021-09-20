@@ -37,7 +37,10 @@ class Home extends Component {
         <div>
           <Link to="/cart" data-testid="shopping-cart-button"><img alt="cart" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/000000/external-cart-grocery-flatart-icons-lineal-color-flatarticons.png" /></Link>
         </div>
-        <CardList productSearch={ productSearch } />
+        <div data-testid="query-button">
+          <CardList productSearch={ productSearch } />
+        </div>
+
       </div>
     );
   }

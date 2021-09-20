@@ -9,9 +9,7 @@ class CardList extends Component {
     this.productList = this.productList.bind(this);
 
     this.state = {
-      title: '',
-      thumbnail: '',
-      price: 0,
+      productList: [{ }],
     };
   }
 
@@ -23,22 +21,27 @@ class CardList extends Component {
   async productList() {
     const { productSearch } = this.props;
     const productList = await getProductsFromCategoryAndQuery('MLB430637', productSearch);
-    console.log(productList.results);
     this.setState({
-
+      productList: productList.results,
     });
+    productList.results.map((product) => console.log(product.id));
   }
 
   render() {
-    const { productSearch } = this.props;
-    const { title, thumbnail, price} = this.state;
+    const { productList } = this.state;
     return (
       <div>
-        <section>
-          testando CardList
-          {' '}
-          {productSearch}
-        </section>
+        {(productList.length === 0) ? (
+          <h4>Nenhum produto foi encontrado</h4>
+        )
+          : productList.map((product) => (
+            <section key={ product.id } data-testid="product">
+              <h4>
+                { product.title }
+              </h4>
+              <img src={ product.thumbnail } alt={ product.title } />
+              <h5>{ `R$ ${product.price}` }</h5>
+            </section>))}
       </div>
     );
   }
