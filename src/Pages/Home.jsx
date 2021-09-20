@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories } from '../services/api';
-import Categories from '../components/Categories';
+import Categories from '../Components/Categories';
+import CardList from '../Components/CardList';
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { isLoaded: false, arrayCategories: [] };
+
+    this.setSearch = this.setSearch.bind(this);
+
+    this.state = { isLoaded: false, arrayCategories: [], productSearch: '' };
   }
 
   componentDidMount() {
@@ -14,12 +18,23 @@ class Home extends Component {
       .then((response) => this.setState({ isLoaded: true, arrayCategories: response }));
   }
 
+  setSearch(event) {
+    const { value } = event.target;
+    this.setState({ productSearch: value });
+  }
+
   render() {
-    const { isLoaded, arrayCategories } = this.state;
+    const { isLoaded, arrayCategories, productSearch } = this.state;
     return (
       <div>
         <form method="get">
-          <input type="text" placeholder="Digite seu texto aqui. " />
+          <input
+            type="text"
+            placeholder="Digite seu texto aqui. "
+            data-testid="query-input"
+            value={ productSearch }
+            onChange={ this.setSearch }
+          />
           <h3 data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </h3>
@@ -29,6 +44,9 @@ class Home extends Component {
         </div>
         <div>
           {isLoaded && <Categories arrayCategories={ arrayCategories } />}
+        </div>
+        <div data-testid="query-button">
+          <CardList productSearch={ productSearch } />
         </div>
       </div>
     );
