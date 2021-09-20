@@ -9,7 +9,7 @@ class CardList extends Component {
     this.productList = this.productList.bind(this);
 
     this.state = {
-      productList: [{ }],
+      productList: [],
     };
   }
 
@@ -22,7 +22,7 @@ class CardList extends Component {
     const { productSearch } = this.props;
     const productList = await getProductsFromCategoryAndQuery('MLB430637', productSearch);
     this.setState({
-      productList: productList.results,
+      productList: ((productList) ? productList.results : []),
     });
   }
 
