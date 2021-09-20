@@ -24,7 +24,6 @@ class CardList extends Component {
     this.setState({
       productList: productList.results,
     });
-    productList.results.map((product) => console.log(product.id));
   }
 
   render() {
