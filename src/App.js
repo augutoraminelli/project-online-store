@@ -13,7 +13,7 @@ class App extends Component {
           <Route exact path="/" component={ Home } />
           <Route path="/cart" component={ Cart } />
           <Route
-            path="/product-details/:tilte/:price/:thumbnail"
+            path="/product-details/:id"
             component={ ProductDetails }
           />
         </BrowserRouter>

@@ -19,9 +19,10 @@ class CardList extends Component {
               <h5>{ `R$ ${product.price}` }</h5>
               <Link
                 data-testid="product-detail-link"
-                to={
-                  `product-details/${product.title}/${product.price}/${product.thumbnail}`
-                }
+                to={ {
+                  pathname: `product-details/${product.id}/`,
+                  state: { product },
+                } }
               >
                 Mais Detalhes
               </Link>
