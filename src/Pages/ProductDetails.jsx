@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ShoppingCart from '../Components/ShoppingCart';
+import BackHome from '../Components/BackHome';
 
 export default class ProductDetails extends Component {
   render() {
@@ -7,7 +9,10 @@ export default class ProductDetails extends Component {
     const { title, price, thumbnail } = product;
     return (
       <div>
-        <header>Teste</header>
+        <div>
+          <BackHome />
+          <ShoppingCart />
+        </div>
         <h4 data-testid="product-detail-name">{title}</h4>
         <h4>
           R$
