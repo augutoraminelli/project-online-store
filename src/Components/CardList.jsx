@@ -3,6 +3,20 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class CardList extends Component {
+  constructor() {
+    super();
+    this.addToCart = this.addToCart.bind(this);
+  }
+
+  addToCart(event) {
+    const { target: { value } } = event;
+    event.target.disabled = true;
+    const { productList, handleListOfCartProducts } = this.props;
+    event.preventDefault();
+    const newProductToCart = productList.find((product) => product.id === value);
+    handleListOfCartProducts(newProductToCart);
+  }
+
   render() {
     const { productList } = this.props;
     return (
@@ -26,6 +40,15 @@ class CardList extends Component {
               >
                 Mais Detalhes
               </Link>
+              <button
+                disabled={ false }
+                value={ product.id }
+                onClick={ this.addToCart }
+                type="submit"
+                data-testid="product-add-to-cart"
+              >
+                Adicionar ao Carrinho
+              </button>
             </section>
           ))}
       </div>
@@ -35,6 +58,7 @@ class CardList extends Component {
 
 CardList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleListOfCartProducts: PropTypes.func.isRequired,
 };
 
 export default CardList;
