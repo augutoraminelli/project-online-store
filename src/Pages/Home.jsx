@@ -7,9 +7,9 @@ import CardList from '../Components/CardList';
 class Home extends Component {
   constructor() {
     super();
-
     this.setSearch = this.setSearch.bind(this);
     this.handleCategorySelected = this.handleCategorySelected.bind(this);
+    this.handleListOfCartProducts = this.handleListOfCartProducts.bind(this);
 
     this.state = {
       isLoaded: false,
@@ -17,12 +17,18 @@ class Home extends Component {
       productSearch: '',
       productList: [],
       category: '',
+      listOfCartProducts: [],
     };
   }
 
   componentDidMount() {
     getCategories()
       .then((response) => this.setState({ isLoaded: true, arrayCategories: response }));
+  }
+
+  handleListOfCartProducts(newProductToCart) {
+    const { listOfCartProducts } = this.state;
+    this.setState({ listOfCartProducts: [...listOfCartProducts, newProductToCart] });
   }
 
   handleCategorySelected({ target: { value } }) {
@@ -42,7 +48,9 @@ class Home extends Component {
   }
 
   render() {
-    const { isLoaded, arrayCategories, productSearch, productList } = this.state;
+    const {
+      isLoaded, arrayCategories, productSearch, productList, listOfCartProducts,
+    } = this.state;
     return (
       <div>
         <form method="get">
@@ -58,7 +66,15 @@ class Home extends Component {
           </h3>
         </form>
         <div>
-          <Link to="/cart" data-testid="shopping-cart-button"><img alt="cart" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/000000/external-cart-grocery-flatart-icons-lineal-color-flatarticons.png" /></Link>
+          <Link
+            to={ {
+              pathname: '/cart',
+              state: { listOfCartProducts },
+            } }
+            data-testid="shopping-cart-button"
+          >
+            <img alt="cart" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/000000/external-cart-grocery-flatart-icons-lineal-color-flatarticons.png" />
+          </Link>
         </div>
         <div>
           {isLoaded && <Categories
@@ -68,7 +84,7 @@ class Home extends Component {
         </div>
         <div data-testid="query-button">
           <CardList
-            // category={ category }
+            handleListOfCartProducts={ this.handleListOfCartProducts }
             productList={ productList }
           />
         </div>
