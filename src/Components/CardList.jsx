@@ -18,7 +18,7 @@ class CardList extends Component {
   }
 
   render() {
-    const { productList } = this.props;
+    const { productList, listOfCartProducts } = this.props;
     return (
       <div>
         {(!productList) ? (
@@ -35,7 +35,7 @@ class CardList extends Component {
                 data-testid="product-detail-link"
                 to={ {
                   pathname: `product-details/${product.id}/`,
-                  state: { product },
+                  state: { product, listOfCartProducts },
                 } }
               >
                 Mais Detalhes
@@ -58,6 +58,7 @@ class CardList extends Component {
 
 CardList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  listOfCartProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleListOfCartProducts: PropTypes.func.isRequired,
 };
 

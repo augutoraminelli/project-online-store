@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class Cart extends Component {
   render() {
     const { location: { state: { listOfCartProducts } } } = this.props;
-    console.log(listOfCartProducts);
+
     return (
       <section>
         {(listOfCartProducts.length === 0) ? (
