@@ -16,6 +16,7 @@ class Home extends Component {
       arrayCategories: [],
       productSearch: '',
       productList: [],
+      category: '',
     };
   }
 
@@ -27,12 +28,17 @@ class Home extends Component {
   handleCategorySelected({ target: { value } }) {
     const { productSearch } = this.state;
     getProductsFromCategoryAndQuery(value, productSearch)
-      .then((response) => this.setState({ productList: response.results }));
+      .then((response) => this.setState({
+        productList: response.results, category: value,
+      }));
   }
 
   setSearch(event) {
+    const { category } = this.state;
     const { value } = event.target;
     this.setState({ productSearch: value });
+    getProductsFromCategoryAndQuery(category, value)
+      .then((response) => this.setState({ productList: response.results }));
   }
 
   render() {
