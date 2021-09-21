@@ -11,13 +11,14 @@ class Home extends Component {
     this.handleCategorySelected = this.handleCategorySelected.bind(this);
     this.handleListOfCartProducts = this.handleListOfCartProducts.bind(this);
 
+  //  this.props && const { location: { state: { listOfCartProducts } } } = this.props;
     this.state = {
       isLoaded: false,
       arrayCategories: [],
       productSearch: '',
       productList: [],
       category: '',
-      listOfCartProducts: [],
+      listOfCartProducts: this.props.location.state.listOfCartProducts || [],
     };
   }
 
@@ -84,6 +85,7 @@ class Home extends Component {
         </div>
         <div data-testid="query-button">
           <CardList
+            listOfCartProducts={ listOfCartProducts }
             handleListOfCartProducts={ this.handleListOfCartProducts }
             productList={ productList }
           />
