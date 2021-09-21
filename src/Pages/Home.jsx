@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
@@ -10,21 +11,23 @@ class Home extends Component {
     this.setSearch = this.setSearch.bind(this);
     this.handleCategorySelected = this.handleCategorySelected.bind(this);
     this.handleListOfCartProducts = this.handleListOfCartProducts.bind(this);
+    this.setStateOfListOfCartProducts = this.setStateOfListOfCartProducts.bind(this);
 
-  //  this.props && const { location: { state: { listOfCartProducts } } } = this.props;
     this.state = {
       isLoaded: false,
       arrayCategories: [],
       productSearch: '',
       productList: [],
       category: '',
-      listOfCartProducts: this.props.location.state.listOfCartProducts || [],
+      listOfCartProducts: [],
     };
   }
 
   componentDidMount() {
     getCategories()
       .then((response) => this.setState({ isLoaded: true, arrayCategories: response }));
+    const { location: { state } } = this.props;
+    if (state) this.setStateOfListOfCartProducts();
   }
 
   handleListOfCartProducts(newProductToCart) {
@@ -38,6 +41,11 @@ class Home extends Component {
       .then((response) => this.setState({
         productList: response.results, category: value,
       }));
+  }
+
+  setStateOfListOfCartProducts() {
+    const { location: { state: { listOfCartProducts } } } = this.props;
+    this.setState({ listOfCartProducts });
   }
 
   setSearch(event) {
@@ -94,5 +102,9 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  location: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default Home;

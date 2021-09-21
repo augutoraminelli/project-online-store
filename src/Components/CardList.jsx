@@ -59,6 +59,7 @@ class CardList extends Component {
 CardList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.object).isRequired,
   listOfCartProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleListOfCartProducts: PropTypes.func.isRequired,
 };
 
 export default CardList;
