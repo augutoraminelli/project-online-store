@@ -68,6 +68,7 @@ class Home extends Component {
         </div>
         <div data-testid="query-button">
           <CardList
+            // category={ category }
             productList={ productList }
           />
         </div>

@@ -14,9 +14,7 @@ class App extends Component {
           <Route path="/cart" component={ Cart } />
           <Route
             path="/product-details/:id"
-            render={
-              (props) => <ProductDetails { ...props } />
-            }
+            component={ ProductDetails }
           />
         </BrowserRouter>
       </div>
