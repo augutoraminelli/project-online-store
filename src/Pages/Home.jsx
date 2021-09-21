@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
 import CardList from '../Components/CardList';
 
@@ -15,7 +15,8 @@ class Home extends Component {
       isLoaded: false,
       arrayCategories: [],
       productSearch: '',
-      categorySelected: '',
+      productList: [],
+      category: '',
     };
   }
 
@@ -25,16 +26,23 @@ class Home extends Component {
   }
 
   handleCategorySelected({ target: { value } }) {
-    this.setState({ categorySelected: value });
+    const { productSearch } = this.state;
+    getProductsFromCategoryAndQuery(value, productSearch)
+      .then((response) => this.setState({
+        productList: response.results, category: value,
+      }));
   }
 
   setSearch(event) {
+    const { category } = this.state;
     const { value } = event.target;
     this.setState({ productSearch: value });
+    getProductsFromCategoryAndQuery(category, value)
+      .then((response) => this.setState({ productList: response.results }));
   }
 
   render() {
-    const { isLoaded, arrayCategories, productSearch, categorySelected } = this.state;
+    const { isLoaded, arrayCategories, productSearch, productList } = this.state;
     return (
       <div>
         <form method="get">
@@ -59,10 +67,10 @@ class Home extends Component {
           />}
         </div>
         <div data-testid="query-button">
-          {isLoaded && <CardList
-            categorySelected={ categorySelected }
-            productSearch={ productSearch }
-          />}
+          <CardList
+            // category={ category }
+            productList={ productList }
+          />
         </div>
       </div>
     );
