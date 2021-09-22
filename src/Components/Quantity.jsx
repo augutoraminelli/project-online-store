@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export class Quantity extends Component {
-  constructor() {
-    super();
-    this.state = { quantity: 1 };
+  constructor(props) {
+    super(props);
+    const { quantity } = props;
+    this.state = { quantity };
     this.addOrRemoveQuantity = this.addOrRemoveQuantity.bind(this);
   }
 
   addOrRemoveQuantity({ target: { value } }) {
     let { quantity } = this.state;
+    const { id, setListOfProducts } = this.props;
     this.setState({ quantity: value === '+' ? quantity += 1 : quantity -= 1 });
+    const productToBeSaved = JSON.parse(localStorage.getItem(id));
+    productToBeSaved.quantity = quantity;
+    localStorage.setItem(id, JSON.stringify(productToBeSaved));
+    setListOfProducts();
   }
 
   render() {
@@ -38,5 +45,11 @@ export class Quantity extends Component {
     );
   }
 }
+
+Quantity.propTypes = {
+  id: PropTypes.string.isRequired,
+  quantity: PropTypes.number.isRequired,
+  setListOfProducts: PropTypes.func.isRequired,
+};
 
 export default Quantity;
