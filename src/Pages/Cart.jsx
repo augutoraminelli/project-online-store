@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Quantity from '../Components/Quantity';
+import { Quantity } from '../Components/Quantity';
 
 class Cart extends Component {
   constructor(props) {
