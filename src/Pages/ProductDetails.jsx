@@ -64,5 +64,5 @@ export default class ProductDetails extends Component {
 }
 
 ProductDetails.propTypes = {
-  location: PropTypes.arrayOf(PropTypes.object).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
 };

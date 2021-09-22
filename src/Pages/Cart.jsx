@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Quantity } from '../Components/Quantity';
 
 class Cart extends Component {
@@ -45,14 +46,16 @@ class Cart extends Component {
               </section>
             ))}
         </section>
-        <button type="button">Finalizar Compra</button>
+        <Link to="/checkout">
+          <button type="button" data-testid="checkout-products">Finalizar compra</button>
+        </Link>
       </main>
     );
   }
 }
 
 Cart.propTypes = {
-  location: PropTypes.arrayOf(PropTypes.object).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default Cart;
