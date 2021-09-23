@@ -4,6 +4,7 @@ import './App.css';
 import Cart from './Pages/Cart';
 import Home from './Pages/Home';
 import ProductDetails from './Pages/ProductDetails';
+import Checkout from './Components/Checkout';
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
             path="/product-details/:id"
             component={ ProductDetails }
           />
+          <Route path="/checkout" component={ Checkout } />
         </BrowserRouter>
       </div>
     );

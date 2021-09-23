@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import BackHome from '../Components/BackHome';
 import { Quantity } from '../Components/Quantity';
 
@@ -76,8 +77,21 @@ class Cart extends Component {
           <h3>
             {total}
           </h3>
-          <button type="button">Finalizar Compra</button>
         </div>
+        <Link
+          to={ {
+            pathname: '/checkout',
+            state: { listOfProducts, total },
+          } }
+        >
+          <button
+            type="button"
+            disabled={ listOfProducts.length === 0 }
+            data-testid="checkout-products"
+          >
+            Finalizar compra
+          </button>
+        </Link>
       </main>
     );
   }

@@ -90,16 +90,20 @@ export default class ProductDetails extends Component {
         </div>
         <RatingForm addRating={ this.addRating } />
         <div>
-          {productForRating !== null && productForRating.rating.map((rating) => (
-            <div key={ rating.email }>
-              <h4>Avaliação:</h4>
-              <p>{rating.email}</p>
-              <p>{rating.message}</p>
-              <p>
-                Nota:
-                {rating.rating}
-              </p>
-            </div>))}
+          {
+            productForRating !== null
+            && productForRating.rating
+            && productForRating.rating.map((rating) => (
+              <div key={ rating.email }>
+                <h4>Avaliação:</h4>
+                <p>{rating.email}</p>
+                <p>{rating.message}</p>
+                <p>
+                  Nota:
+                  {rating.rating}
+                </p>
+              </div>))
+          }
         </div>
       </div>
     );
