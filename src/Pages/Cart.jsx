@@ -1,31 +1,53 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import BackHome from '../Components/BackHome';
 import { Quantity } from '../Components/Quantity';
 
 class Cart extends Component {
-  constructor(props) {
-    super(props);
-    const { location: { state: { listOfCartProducts } } } = this.props;
-    this.removeProductFromState = this.removeProductFromState.bind(this);
-    this.state = { listOfCartProducts };
+  constructor() {
+    super();
+    this.state = { listOfProducts: [], totalPrice: 0 };
+    this.removeProduct = this.removeProduct.bind(this);
+    this.setListOfProducts = this.setListOfProducts.bind(this);
+    this.handleTotalPrice = this.handleTotalPrice.bind(this);
   }
 
-  removeProductFromState({ target: { value } }) {
-    const { listOfCartProducts } = this.state;
-    const productToBeRemovedInTheState = listOfCartProducts
-      .filter((product) => product.id !== value);
-    this.setState({ listOfCartProducts: productToBeRemovedInTheState });
+  componentDidMount() {
+    this.setListOfProducts();
+  }
+
+  handleTotalPrice(products) {
+    if (products !== 0) {
+      const totalPrice = products.reduce((total, product) => (
+        total + (product.price * product.quantity)), 0).toFixed(2);
+      this.setState({ totalPrice });
+    }
+  }
+
+  setListOfProducts() {
+    const list = Object.values(localStorage);
+    const products = [];
+    list.map((product) => products.push(JSON.parse(product)));
+    this.setState({ listOfProducts: products });
+    this.handleTotalPrice(products);
+  }
+
+  removeProduct({ target: { value } }) {
+    console.log(value);
+    localStorage.removeItem(value);
+    this.setListOfProducts();
   }
 
   render() {
-    const { listOfCartProducts } = this.state;
+    const { listOfProducts, totalPrice } = this.state;
+    const total = `Preço Total: R$ ${totalPrice}`;
     return (
       <main>
+        <BackHome />
         <section>
-          {(listOfCartProducts.length === 0) ? (
+          {(listOfProducts.length === 0) ? (
             <h4 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h4>
           )
-            : listOfCartProducts.map((product) => (
+            : listOfProducts.map((product) => (
               <section key={ product.id } data-testid="product">
                 <h4 data-testid="shopping-cart-product-name">
                   { product.title }
@@ -33,11 +55,15 @@ class Cart extends Component {
                 <img src={ product.thumbnail } alt={ product.title } />
                 <h5>{ `R$ ${product.price}` }</h5>
                 <div>
-                  <Quantity />
+                  <Quantity
+                    setListOfProducts={ this.setListOfProducts }
+                    id={ product.id }
+                    quantity={ product.quantity }
+                  />
                 </div>
                 <button
                   value={ product.id }
-                  onClick={ this.removeProductFromState }
+                  onClick={ this.removeProduct }
                   type="button"
                 >
                   X
@@ -45,14 +71,15 @@ class Cart extends Component {
               </section>
             ))}
         </section>
-        <button type="button">Finalizar Compra</button>
+        <div>
+          <h3>
+            {total}
+          </h3>
+          <button type="button">Finalizar Compra</button>
+        </div>
       </main>
     );
   }
 }
-
-Cart.propTypes = {
-  location: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default Cart;

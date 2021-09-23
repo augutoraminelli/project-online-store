@@ -11,10 +11,13 @@ class CardList extends Component {
   addToCart(event) {
     const { target: { value } } = event;
     event.target.disabled = true;
-    const { productList, handleListOfCartProducts } = this.props;
+    const { productList } = this.props;
     event.preventDefault();
     const newProductToCart = productList.find((product) => product.id === value);
-    handleListOfCartProducts(newProductToCart);
+    newProductToCart.quantity = 1;
+    localStorage.setItem(
+      newProductToCart.id, JSON.stringify(newProductToCart),
+    );
   }
 
   render() {
@@ -59,7 +62,6 @@ class CardList extends Component {
 CardList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.object).isRequired,
   listOfCartProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handleListOfCartProducts: PropTypes.func.isRequired,
 };
 
 export default CardList;
