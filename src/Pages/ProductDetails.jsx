@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BackHome from '../Components/BackHome';
 import ShoppingCart from '../Components/ShoppingCart';
+import RatingForm from '../Components/RatingForm';
 
 export default class ProductDetails extends Component {
   constructor(props) {
@@ -73,6 +74,7 @@ export default class ProductDetails extends Component {
             +
           </button>
         </div>
+        <RatingForm />
       </div>
     );
   }
