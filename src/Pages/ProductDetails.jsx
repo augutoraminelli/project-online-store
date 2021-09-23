@@ -9,6 +9,7 @@ export default class ProductDetails extends Component {
     super(props);
     this.setListOfCartProducts = this.setListOfCartProducts.bind(this);
     this.addOrRemoveQuantity = this.addOrRemoveQuantity.bind(this);
+    this.addRating = this.addRating.bind(this);
     const { location: { state: { product: { id } } } } = this.props;
     this.state = {
       quantity: (
@@ -21,9 +22,18 @@ export default class ProductDetails extends Component {
     const { location: { state: { product } } } = this.props;
     const { quantity } = this.state;
     product.quantity = quantity;
+    product.isOnCart = true;
     localStorage.setItem(
       product.id, JSON.stringify(product),
     );
+  }
+
+  addRating(email, message, rating) {
+    const { location: { state: { product } } } = this.props;
+    product.isOnCart = false;
+    product.rating = { email, message, rating };
+    console.log(product);
+    localStorage.setItem(product.id, JSON.stringify(product));
   }
 
   addOrRemoveQuantity({ target: { value } }) {
@@ -74,7 +84,7 @@ export default class ProductDetails extends Component {
             +
           </button>
         </div>
-        <RatingForm />
+        <RatingForm addRating={ this.addRating } />
       </div>
     );
   }

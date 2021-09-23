@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactStars from 'react-rating-stars-component';
-import StarRating from './StarRating';
 
 class RatingForm extends Component {
   constructor() {
@@ -17,7 +17,10 @@ class RatingForm extends Component {
   }
 
   handleSubmit(event) {
+    const { addRating } = this.props;
+    const { message, email, rating } = this.state;
     event.preventDefault();
+    addRating(email, message, rating);
   }
 
   render() {
@@ -61,5 +64,9 @@ class RatingForm extends Component {
     );
   }
 }
+
+RatingForm.propTypes = {
+  addRating: PropTypes.func.isRequired,
+};
 
 export default RatingForm;
