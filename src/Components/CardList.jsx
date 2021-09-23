@@ -15,6 +15,7 @@ class CardList extends Component {
     event.preventDefault();
     const newProductToCart = productList.find((product) => product.id === value);
     newProductToCart.quantity = 1;
+    newProductToCart.isOnCart = true;
     localStorage.setItem(
       newProductToCart.id, JSON.stringify(newProductToCart),
     );

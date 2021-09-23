@@ -104,7 +104,7 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  location: PropTypes.arrayOf(PropTypes.object).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default Home;

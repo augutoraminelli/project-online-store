@@ -26,7 +26,8 @@ class Cart extends Component {
   setListOfProducts() {
     const list = Object.values(localStorage);
     const products = [];
-    list.map((product) => products.push(JSON.parse(product)));
+    const filteredProducts = list.filter((product) => JSON.parse(product).isOnCart);
+    filteredProducts.map((item) => products.push(JSON.parse(item)));
     this.setState({ listOfProducts: products });
     this.handleTotalPrice(products);
   }
