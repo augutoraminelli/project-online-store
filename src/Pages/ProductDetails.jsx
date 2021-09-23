@@ -15,6 +15,7 @@ export default class ProductDetails extends Component {
       quantity: (
         localStorage.getItem(id)
           ? JSON.parse(localStorage.getItem(id)).quantity : 1),
+      updateState: false,
     };
   }
 
@@ -31,9 +32,11 @@ export default class ProductDetails extends Component {
   addRating(email, message, rating) {
     const { location: { state: { product } } } = this.props;
     product.isOnCart = false;
-    product.rating = { email, message, rating };
-    console.log(product);
+    product.rating = product.rating
+      ? [...product.rating, { email, message, rating }] : [{ email, message, rating }];
     localStorage.setItem(product.id, JSON.stringify(product));
+    const { updateState } = this.state;
+    this.setState({ updateState: !updateState });
   }
 
   addOrRemoveQuantity({ target: { value } }) {
@@ -45,6 +48,7 @@ export default class ProductDetails extends Component {
     const { location: { state: { product } } } = this.props;
     const { title, price, thumbnail } = product;
     const { quantity } = this.state;
+    const productForRating = JSON.parse(localStorage.getItem(product.id));
     return (
       <div>
         <div>
@@ -85,6 +89,18 @@ export default class ProductDetails extends Component {
           </button>
         </div>
         <RatingForm addRating={ this.addRating } />
+        <div>
+          {productForRating !== null && productForRating.rating.map((rating) => (
+            <div key={ rating.email }>
+              <h4>Avaliação:</h4>
+              <p>{rating.email}</p>
+              <p>{rating.message}</p>
+              <p>
+                Nota:
+                {rating.rating}
+              </p>
+            </div>))}
+        </div>
       </div>
     );
   }
