@@ -26,14 +26,12 @@ export default class ProductDetails extends Component {
 
   setListOfCartProducts() {
     let { location: { state: { product } } } = this.props;
-    const { location: { state: { availableQuantity } } } = this.props;
     const { quantity } = this.state;
     const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id));
     if (productFromLocalStorage && productFromLocalStorage.isOnCart) {
       product = JSON.parse(localStorage.getItem(product.id));
       product.quantity += quantity;
       product.isOnCart = true;
-      console.log(JSON.parse(localStorage.getItem(product.id)));
       this.updateNumberItens();
     } else {
       product.quantity = quantity;
@@ -41,7 +39,6 @@ export default class ProductDetails extends Component {
     }
     localStorage.setItem(product.id, JSON.stringify(product));
     this.updateNumberItens();
-    console.log(availableQuantity);
   }
 
   addRating(email, message, rating) {
@@ -76,7 +73,7 @@ export default class ProductDetails extends Component {
 
   render() {
     const { location: { state: { product } } } = this.props;
-    const { title, price, thumbnail, available_quantity } = product;
+    const { title, price, thumbnail } = product;
     const { quantity, numberItensUpdate } = this.state;
     const productForRating = JSON.parse(localStorage.getItem(product.id));
     return (
@@ -99,7 +96,7 @@ export default class ProductDetails extends Component {
           disabled={
             productForRating
             && productForRating.isOnCart
-            && productForRating.quantity === available_quantity
+            && productForRating.quantity === product.available_quantity
           }
           data-testid="product-detail-add-to-cart"
           type="button"
@@ -120,7 +117,7 @@ export default class ProductDetails extends Component {
           <button
             data-testid="product-increase-quantity"
             type="button"
-            disabled={ quantity >= available_quantity }
+            disabled={ quantity >= product.available_quantity }
             onClick={ this.addOrRemoveQuantity }
             value="+"
           >

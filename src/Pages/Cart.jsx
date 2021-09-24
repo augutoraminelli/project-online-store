@@ -34,7 +34,6 @@ class Cart extends Component {
   }
 
   removeProduct({ target: { value } }) {
-    console.log(value);
     localStorage.removeItem(value);
     this.setListOfProducts();
   }
