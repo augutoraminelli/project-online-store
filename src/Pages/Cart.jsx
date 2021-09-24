@@ -34,7 +34,6 @@ class Cart extends Component {
   }
 
   removeProduct({ target: { value } }) {
-    console.log(value);
     localStorage.removeItem(value);
     this.setListOfProducts();
   }
@@ -60,6 +59,7 @@ class Cart extends Component {
                   <Quantity
                     setListOfProducts={ this.setListOfProducts }
                     id={ product.id }
+                    availableQuantity={ product.available_quantity }
                     quantity={ product.quantity }
                   />
                 </div>

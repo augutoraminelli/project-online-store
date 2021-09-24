@@ -3,40 +3,63 @@ import PropTypes from 'prop-types';
 import BackHome from '../Components/BackHome';
 import ShoppingCart from '../Components/ShoppingCart';
 import RatingForm from '../Components/RatingForm';
+import numberItens from '../services/numberItens';
 
 export default class ProductDetails extends Component {
   constructor(props) {
     super(props);
+
     this.setListOfCartProducts = this.setListOfCartProducts.bind(this);
     this.addOrRemoveQuantity = this.addOrRemoveQuantity.bind(this);
     this.addRating = this.addRating.bind(this);
+    this.updateNumberItens = this.updateNumberItens.bind(this);
+
     const { location: { state: { product: { id } } } } = this.props;
     this.state = {
-      quantity: (
-        localStorage.getItem(id)
-          ? JSON.parse(localStorage.getItem(id)).quantity : 1),
+      quantity: 1,
       updateState: false,
+      numberItensUpdate: numberItens(),
+      isRating: (JSON.parse(localStorage.getItem(id))
+      && JSON.parse(localStorage.getItem(id)).rating),
     };
   }
 
   setListOfCartProducts() {
-    const { location: { state: { product } } } = this.props;
+    let { location: { state: { product } } } = this.props;
     const { quantity } = this.state;
-    product.quantity = quantity;
-    product.isOnCart = true;
-    localStorage.setItem(
-      product.id, JSON.stringify(product),
-    );
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id));
+    if (productFromLocalStorage && productFromLocalStorage.isOnCart) {
+      product = JSON.parse(localStorage.getItem(product.id));
+      product.quantity += quantity;
+      product.isOnCart = true;
+      this.updateNumberItens();
+    } else {
+      product.quantity = quantity;
+      product.isOnCart = true;
+    }
+    localStorage.setItem(product.id, JSON.stringify(product));
+    this.updateNumberItens();
   }
 
   addRating(email, message, rating) {
     const { location: { state: { product } } } = this.props;
-    product.isOnCart = false;
-    product.rating = product.rating
-      ? [...product.rating, { email, message, rating }] : [{ email, message, rating }];
-    localStorage.setItem(product.id, JSON.stringify(product));
-    const { updateState } = this.state;
-    this.setState({ updateState: !updateState });
+    const { isRating, quantity } = this.state;
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id))
+     || product;
+    if (isRating) {
+      productFromLocalStorage.rating = [...productFromLocalStorage.rating,
+        { email, message, rating }];
+      if (productFromLocalStorage.isOnCart) productFromLocalStorage.quantity += quantity;
+      localStorage.setItem(product.id, JSON.stringify(productFromLocalStorage));
+    } else {
+      productFromLocalStorage.rating = productFromLocalStorage.rating
+        ? [...productFromLocalStorage.rating, { email, message, rating }]
+        : [{ email, message, rating }];
+      localStorage.setItem(productFromLocalStorage.id,
+        JSON.stringify(productFromLocalStorage));
+      const { updateState } = this.state;
+      this.setState({ updateState: !updateState });
+    }
   }
 
   addOrRemoveQuantity({ target: { value } }) {
@@ -44,16 +67,23 @@ export default class ProductDetails extends Component {
     this.setState({ quantity: value === '+' ? quantity += 1 : quantity -= 1 });
   }
 
+  updateNumberItens() {
+    this.setState({ numberItensUpdate: numberItens() });
+  }
+
   render() {
     const { location: { state: { product } } } = this.props;
     const { title, price, thumbnail } = product;
-    const { quantity } = this.state;
+    const { quantity, numberItensUpdate } = this.state;
     const productForRating = JSON.parse(localStorage.getItem(product.id));
     return (
       <div>
         <div>
           <BackHome />
-          <ShoppingCart />
+          <div>
+            <ShoppingCart />
+            <span data-testid="shopping-cart-size">{numberItensUpdate}</span>
+          </div>
         </div>
         <h4 data-testid="product-detail-name">{title}</h4>
         <h4>
@@ -63,6 +93,11 @@ export default class ProductDetails extends Component {
         <img src={ thumbnail } alt="produto" />
         <button
           onClick={ this.setListOfCartProducts }
+          disabled={
+            productForRating
+            && productForRating.isOnCart
+            && productForRating.quantity === product.available_quantity
+          }
           data-testid="product-detail-add-to-cart"
           type="button"
         >
@@ -82,6 +117,7 @@ export default class ProductDetails extends Component {
           <button
             data-testid="product-increase-quantity"
             type="button"
+            disabled={ quantity >= product.available_quantity }
             onClick={ this.addOrRemoveQuantity }
             value="+"
           >
