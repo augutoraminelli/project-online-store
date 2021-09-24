@@ -11,16 +11,14 @@ export class Quantity extends Component {
 
   addOrRemoveQuantity({ target: { value } }) {
     let { quantity } = this.state;
-    const { id, setListOfProducts } = this.props;
+    const { setListOfProducts } = this.props;
     this.setState({ quantity: value === '+' ? quantity += 1 : quantity -= 1 });
-    const productToBeSaved = JSON.parse(localStorage.getItem(id));
-    productToBeSaved.quantity = quantity;
-    localStorage.setItem(id, JSON.stringify(productToBeSaved));
     setListOfProducts();
   }
 
   render() {
     const { quantity } = this.state;
+    const { availableQuantity } = this.props;
     return (
       <div>
         <button
@@ -36,6 +34,7 @@ export class Quantity extends Component {
         <button
           data-testid="product-increase-quantity"
           type="button"
+          disabled={ quantity >= availableQuantity }
           onClick={ this.addOrRemoveQuantity }
           value="+"
         >
@@ -47,7 +46,7 @@ export class Quantity extends Component {
 }
 
 Quantity.propTypes = {
-  id: PropTypes.string.isRequired,
+  availableQuantity: PropTypes.number.isRequired,
   quantity: PropTypes.number.isRequired,
   setListOfProducts: PropTypes.func.isRequired,
 };

@@ -9,16 +9,22 @@ class CardList extends Component {
   }
 
   addToCart(event) {
-    const { target: { value } } = event;
-    event.target.disabled = true;
-    const { productList } = this.props;
     event.preventDefault();
-    const newProductToCart = productList.find((product) => product.id === value);
-    newProductToCart.quantity = 1;
-    newProductToCart.isOnCart = true;
+    const { target: { value } } = event;
+    const { productList, changeTotalItensOfCart } = this.props;
+    let product = productList.find((item) => item.id === value);
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id));
+    if (productFromLocalStorage && !productFromLocalStorage.rating) {
+      product = JSON.parse(localStorage.getItem(product.id));
+      product.quantity += 1;
+    } else {
+      product.quantity = 1;
+      product.isOnCart = true;
+    }
     localStorage.setItem(
-      newProductToCart.id, JSON.stringify(newProductToCart),
+      product.id, JSON.stringify(product),
     );
+    changeTotalItensOfCart();
   }
 
   render() {
@@ -34,6 +40,8 @@ class CardList extends Component {
                 { product.title }
               </h4>
               <img src={ product.thumbnail } alt={ product.title } />
+              { product.shipping.free_shipping
+              && <div data-testid="free-shipping">Frete Grátis</div> }
               <h5>{ `R$ ${product.price}` }</h5>
               <Link
                 data-testid="product-detail-link"
@@ -45,7 +53,6 @@ class CardList extends Component {
                 Mais Detalhes
               </Link>
               <button
-                disabled={ false }
                 value={ product.id }
                 onClick={ this.addToCart }
                 type="submit"
@@ -63,6 +70,7 @@ class CardList extends Component {
 CardList.propTypes = {
   productList: PropTypes.arrayOf(PropTypes.object).isRequired,
   listOfCartProducts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  changeTotalItensOfCart: PropTypes.func.isRequired,
 };
 
 export default CardList;

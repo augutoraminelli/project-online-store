@@ -60,6 +60,7 @@ class Cart extends Component {
                   <Quantity
                     setListOfProducts={ this.setListOfProducts }
                     id={ product.id }
+                    availableQuantity={ product.available_quantity }
                     quantity={ product.quantity }
                   />
                 </div>

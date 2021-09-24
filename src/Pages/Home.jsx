@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../Components/Categories';
 import CardList from '../Components/CardList';
+import numberItens from '../services/numberItens';
 
 class Home extends Component {
   constructor() {
@@ -12,6 +13,7 @@ class Home extends Component {
     this.handleCategorySelected = this.handleCategorySelected.bind(this);
     this.handleListOfCartProducts = this.handleListOfCartProducts.bind(this);
     this.setStateOfListOfCartProducts = this.setStateOfListOfCartProducts.bind(this);
+    this.changeTotalItensOfCart = this.changeTotalItensOfCart.bind(this);
 
     this.state = {
       isLoaded: false,
@@ -20,6 +22,7 @@ class Home extends Component {
       productList: [],
       category: '',
       listOfCartProducts: [],
+      totalItensOfCart: numberItens(),
     };
   }
 
@@ -56,9 +59,14 @@ class Home extends Component {
       .then((response) => this.setState({ productList: response.results }));
   }
 
+  changeTotalItensOfCart() {
+    this.setState({ totalItensOfCart: numberItens() });
+  }
+
   render() {
     const {
-      isLoaded, arrayCategories, productSearch, productList, listOfCartProducts,
+      isLoaded, arrayCategories,
+      productSearch, productList, listOfCartProducts, totalItensOfCart,
     } = this.state;
     return (
       <div>
@@ -75,6 +83,7 @@ class Home extends Component {
           </h3>
         </form>
         <div>
+          <span data-testid="shopping-cart-size">{totalItensOfCart}</span>
           <Link
             to={ {
               pathname: '/cart',
@@ -93,6 +102,7 @@ class Home extends Component {
         </div>
         <div data-testid="query-button">
           <CardList
+            changeTotalItensOfCart={ this.changeTotalItensOfCart }
             listOfCartProducts={ listOfCartProducts }
             handleListOfCartProducts={ this.handleListOfCartProducts }
             productList={ productList }
