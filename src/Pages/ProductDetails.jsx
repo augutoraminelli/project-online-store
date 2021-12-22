@@ -83,8 +83,7 @@ export default class ProductDetails extends Component {
         <div className="header-product-detail">
           <BackHome />
           <div>
-            <ShoppingCart />
-            <span data-testid="shopping-cart-size">{numberItensUpdate}</span>
+            <ShoppingCart NumberOfItens={ numberItensUpdate } />
           </div>
         </div>
         <div
