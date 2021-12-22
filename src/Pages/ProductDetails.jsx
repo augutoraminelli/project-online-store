@@ -5,6 +5,8 @@ import ShoppingCart from '../Components/ShoppingCart';
 import RatingForm from '../Components/RatingForm';
 import numberItens from '../services/numberItens';
 
+import '../style/productDetails.css';
+
 export default class ProductDetails extends Component {
   constructor(props) {
     super(props);
@@ -77,71 +79,96 @@ export default class ProductDetails extends Component {
     const { quantity, numberItensUpdate } = this.state;
     const productForRating = JSON.parse(localStorage.getItem(product.id));
     return (
-      <div>
-        <div>
+      <section>
+        <div className="header-product-detail">
           <BackHome />
           <div>
             <ShoppingCart />
             <span data-testid="shopping-cart-size">{numberItensUpdate}</span>
           </div>
         </div>
-        <h4 data-testid="product-detail-name">{title}</h4>
-        <h4>
-          R$
-          {price}
-        </h4>
-        <img src={ thumbnail } alt="produto" />
-        <button
-          onClick={ this.setListOfCartProducts }
-          disabled={
-            productForRating
-            && productForRating.isOnCart
-            && productForRating.quantity === product.available_quantity
-          }
-          data-testid="product-detail-add-to-cart"
-          type="button"
+        <div
+          className="flex-col cart-section bg-white
+          shadow-2xl rounded px-10 pt-6 pb-8 mb-2"
         >
-          Adicionar ao Carrinho
-        </button>
-        <div>
-          <button
-            data-testid="product-decrease-quantity"
-            type="button"
-            disabled={ quantity === 1 }
-            onClick={ this.addOrRemoveQuantity }
-            value="-"
+          <h4
+            className="font-sans italic text-lg
+              text-gray-800 text-center"
           >
-            -
-          </button>
-          <span data-testid="shopping-cart-product-quantity">{ quantity }</span>
+            {title}
+          </h4>
+          <h4 className="font-sans italic text-lg text-gray-800 text-center">
+            R$
+            {price}
+          </h4>
+          <img className="cart-image" src={ thumbnail } alt="produto" />
           <button
-            data-testid="product-increase-quantity"
+            className="bg-blue-500 hover:bg-blue-700 text-white
+            font-bold py-2 px-4 border border-blue-700 rounded mt-4"
+            onClick={ this.setListOfCartProducts }
+            disabled={
+              productForRating
+              && productForRating.isOnCart
+              && productForRating.quantity === product.available_quantity
+            }
+            data-testid="product-detail-add-to-cart"
             type="button"
-            disabled={ quantity >= product.available_quantity }
-            onClick={ this.addOrRemoveQuantity }
-            value="+"
           >
-            +
+            Adicionar ao Carrinho
           </button>
+          <div>
+            <button
+              className="bg-gray-300 hover:bg-gray-400
+              text-gray-800 font-bold py-2 px-4 rounded-l mr-2 mt-4 mb-4"
+              data-testid="product-decrease-quantity"
+              type="button"
+              disabled={ quantity === 1 }
+              onClick={ this.addOrRemoveQuantity }
+              value="-"
+            >
+              -
+            </button>
+            <span data-testid="shopping-cart-product-quantity">{ quantity }</span>
+            <button
+              className="bg-gray-300 hover:bg-gray-400
+              text-gray-800 font-bold py-2 px-4 rounded-l ml-2 mt-4 mb-4"
+              data-testid="product-increase-quantity"
+              type="button"
+              disabled={ quantity >= product.available_quantity }
+              onClick={ this.addOrRemoveQuantity }
+              value="+"
+            >
+              +
+            </button>
+          </div>
         </div>
         <RatingForm addRating={ this.addRating } />
-        <div>
+        <h3
+          className="mb-4 text-lg font-semibold
+          text-gray-900 mt-4"
+        >
+          <strong>Avaliações</strong>
+        </h3>
+        <div className="space-y-4">
           {
             productForRating !== null
             && productForRating.rating
             && productForRating.rating.map((rating) => (
-              <div key={ rating.email }>
-                <h4>Avaliação:</h4>
-                <p>{rating.email}</p>
-                <p>{rating.message}</p>
+              <div
+                className="flex-1 border rounded-lg px-4
+                py-2 sm:px-6 sm:py-4 leading-relaxed"
+                key={ rating.email }
+              >
+                <p><strong>{rating.email}</strong></p>
+                <p className="text-sm">{rating.message}</p>
                 <p>
                   Nota:
-                  {rating.rating}
+                  <strong>{rating.rating}</strong>
                 </p>
               </div>))
           }
         </div>
-      </div>
+      </section>
     );
   }
 }
