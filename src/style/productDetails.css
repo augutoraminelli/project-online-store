@@ -1,0 +1,27 @@
+.cart-image {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cart-section {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+  }
+
+  .header-product-detail {
+    background-color: yellow;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 20px;
+  }
