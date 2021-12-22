@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import BackHome from '../Components/BackHome';
 import { Quantity } from '../Components/Quantity';
+import '../style/cart.css';
 
 class Cart extends Component {
   constructor() {
@@ -42,20 +43,33 @@ class Cart extends Component {
     const { listOfProducts, totalPrice } = this.state;
     const total = `Preço Total: R$ ${totalPrice}`;
     return (
-      <main>
-        <BackHome />
-        <section>
+      <main className="flex-col justify-center">
+        <BackHome className="backhome" />
+        <section className="space-y-10">
           {(listOfProducts.length === 0) ? (
             <h4 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h4>
           )
             : listOfProducts.map((product) => (
-              <section key={ product.id } data-testid="product">
-                <h4 data-testid="shopping-cart-product-name">
+              <section
+                key={ product.id }
+                className="flex-col cart-section
+              bg-white shadow-2xl rounded px-10 pt-6 pb-8 mb-4"
+              >
+                <h4
+                  className="font-sans
+                 italic text-lg text-gray-800 text-center truncate "
+                >
                   { product.title }
                 </h4>
-                <img src={ product.thumbnail } alt={ product.title } />
-                <h5>{ `R$ ${product.price}` }</h5>
-                <div>
+                <div className="flex content-center">
+                  <img
+                    src={ product.thumbnail }
+                    alt={ product.title }
+                    className="cart-image"
+                  />
+                </div>
+                <h5 className="mt-2">{ `R$ ${product.price}` }</h5>
+                <div className="mt-4">
                   <Quantity
                     setListOfProducts={ this.setListOfProducts }
                     id={ product.id }
@@ -67,31 +81,38 @@ class Cart extends Component {
                   value={ product.id }
                   onClick={ this.removeProduct }
                   type="button"
+                  className="bg-red-500 hover:bg-red-700
+                   text-white font-bold py-2 px-4 border border-red-700 rounded mt-4"
                 >
-                  X
+                  Remover Produto
                 </button>
               </section>
             ))}
         </section>
-        <div>
-          <h3>
-            {total}
-          </h3>
-        </div>
-        <Link
-          to={ {
-            pathname: '/checkout',
-            state: { listOfProducts, total },
-          } }
-        >
-          <button
-            type="button"
-            disabled={ listOfProducts.length === 0 }
-            data-testid="checkout-products"
+        <div className="mt-5">
+          <div className="mb-3">
+            <h3 className="font-sans text-lg text-gray-800 text-center font-bold">
+              {total}
+            </h3>
+          </div>
+          <Link
+            to={ {
+              pathname: '/checkout',
+              state: { listOfProducts, total },
+            } }
           >
-            Finalizar compra
-          </button>
-        </Link>
+            <button
+              type="button"
+              disabled={ listOfProducts.length === 0 }
+              data-testid="checkout-products"
+              className="bg-blue-500
+               hover:bg-blue-700
+              text-white font-bold py-2 px-4 border border-blue-700 rounded"
+            >
+              Finalizar compra
+            </button>
+          </Link>
+        </div>
       </main>
     );
   }
