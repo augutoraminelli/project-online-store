@@ -27,6 +27,7 @@ export class Quantity extends Component {
           disabled={ quantity === 1 }
           onClick={ this.addOrRemoveQuantity }
           value="-"
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l mr-2"
         >
           -
         </button>
@@ -37,6 +38,7 @@ export class Quantity extends Component {
           disabled={ quantity >= availableQuantity }
           onClick={ this.addOrRemoveQuantity }
           value="+"
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2"
         >
           +
         </button>

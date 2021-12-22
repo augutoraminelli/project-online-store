@@ -1,0 +1,35 @@
+.cart-image {
+  align-items: center;
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  margin: auto;
+  width: 200px;
+}
+
+.cart-section {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 500px;
+}
+
+
+.form-checkout {  
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.payment-check {
+  width: fit-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+}
