@@ -33,12 +33,12 @@ class Checkout extends Component {
           <h3
             className="font-sans
            text-lg
-           text-gray-800 text-center font-bold mb-2"
+           text-gray-800 text-center font-bold mb-2 truncate"
           >
             {total}
 
           </h3>
-          <section>
+          <section className="space-y-10">
             {listOfProducts.map((product) => (
               <div
                 key={ product.id }
@@ -48,7 +48,7 @@ class Checkout extends Component {
               >
                 <h4
                   className="font-sans
-                italic text-lg text-gray-800 text-center truncate"
+                italic text-lg text-gray-800 text-center text-clip"
                 >
                   { product.title }
                 </h4>
@@ -82,7 +82,11 @@ class Checkout extends Component {
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase
-                 tracking-wide text-gray-700 text-xs font-bold mb-2"
+                 tracking-wide
+                  text-gray-700
+                   text-xs
+                    font-bold
+                     mb-2"
                   htmlFor="grid-first-name"
                 >
                   Nome completo
