@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import barcode from '../icons/barcode.png';
+import bankCard from '../icons/bank-card.png';
 
 export class CheckoutInputs extends Component {
   render() {
@@ -60,7 +62,7 @@ export class CheckoutInputs extends Component {
         </div>
         <div className="flex-col mb-5 mt-10 payment-check space-x-2">
           <div className="flex payment-check space-x-2">
-            <img alt="card" src="https://img.icons8.com/ios/50/000000/bank-card-back-side.png" />
+            <img alt="card" src={ bankCard } />
             {['Visa', 'Mastercard', 'Elo'].map((method, index) => (
               <label key={ index } htmlFor={ method }>
                 <input type="radio" name="payment" id={ method } />
@@ -70,7 +72,7 @@ export class CheckoutInputs extends Component {
             ))}
           </div>
           <div className="flex payment-check space-x-2">
-            <img alt="bank slip" src="https://img.icons8.com/ios/50/000000/barcode.png" />
+            <img alt="bank slip" src={ barcode } />
             <label htmlFor="Boleto">
               <input type="radio" name="payment" id="Boleto" />
               {' '}

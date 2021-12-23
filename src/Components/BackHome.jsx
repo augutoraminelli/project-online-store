@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import iconHome from '../icons/icon-home.png';
 
 class BackHome extends Component {
   render() {
     return (
       <div>
-        <Link to="/"><img alt="home" src="https://img.icons8.com/material/12/000000/home--v5.png" /></Link>
+        <Link to="/">
+          <img
+            className="w-10 ml-5 mt-5"
+            alt="home"
+            src={ iconHome }
+          />
+        </Link>
       </div>
     );
   }

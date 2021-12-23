@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import Home from '../Pages/Home';
 import { CheckoutInputs } from './CheckoutInputs';
+import iconGoBack from '../icons/icon-goBack.png';
 
 class Checkout extends Component {
   constructor() {
@@ -28,19 +29,26 @@ class Checkout extends Component {
     const { redirect } = this.state;
     return (
       <section>
-
         <div>
-          <Link to="/cart" data-testid="shopping-cart-button"><img alt="cart" src="https://img.icons8.com/external-becris-lineal-becris/64/000000/external-back-arrow-mintab-for-ios-becris-lineal-becris.png" /></Link>
-          <h1 className="font-medium text-lg">Revise seus Produtos</h1>
+          <Link
+            to="/cart"
+          >
+            <img
+              className="ml-5 mt-5 w-10"
+              alt="cart"
+              src={ iconGoBack }
+            />
+          </Link>
+          <h1 className="font-medium text-lg mb-10">Revise seus Produtos</h1>
           <h3
             className="font-sans
            text-lg
-           text-gray-800 text-center font-bold mb-2"
+           text-gray-800 text-center font-bold mb-2 truncate"
           >
             {total}
 
           </h3>
-          <section>
+          <section className="space-y-10 mt-10">
             {listOfProducts.map((product) => (
               <div
                 key={ product.id }
@@ -50,7 +58,7 @@ class Checkout extends Component {
               >
                 <h4
                   className="font-sans
-                italic text-lg text-gray-800 text-center truncate"
+                italic text-lg text-gray-800 text-center text-clip"
                 >
                   { product.title }
                 </h4>
@@ -80,12 +88,13 @@ class Checkout extends Component {
           </h4>
           <CheckoutInputs />
           <button
+            onClick={ this.clearCart }
             type="submit"
             className="bg-blue-500
             hover:bg-blue-700 text-white font-bold
-            py-2 px-4 border border-blue-700 rounded mt-5 mb-5"
+            py-2 px-4 border border-blue-700 rounded mt-8 mb-8"
           >
-            Comprar
+            Finalizar Pedido
           </button>
         </section>
         {redirect && <Redirect to="/" Component={ Home } />}

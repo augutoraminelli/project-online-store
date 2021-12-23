@@ -10,9 +10,13 @@ export class Quantity extends Component {
   }
 
   addOrRemoveQuantity({ target: { value } }) {
+    const { id } = this.props;
     let { quantity } = this.state;
+    const productFromLs = JSON.parse(localStorage.getItem(id));
+    productFromLs.quantity = value === '+' ? quantity += 1 : quantity -= 1;
+    localStorage.setItem(id, JSON.stringify(productFromLs));
     const { setListOfProducts } = this.props;
-    this.setState({ quantity: value === '+' ? quantity += 1 : quantity -= 1 });
+    this.setState({ quantity: productFromLs.quantity });
     setListOfProducts();
   }
 
@@ -27,7 +31,8 @@ export class Quantity extends Component {
           disabled={ quantity === 1 }
           onClick={ this.addOrRemoveQuantity }
           value="-"
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l mr-2"
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800
+           font-bold py-2 px-4 rounded-l mr-2"
         >
           -
         </button>
@@ -38,7 +43,8 @@ export class Quantity extends Component {
           disabled={ quantity >= availableQuantity }
           onClick={ this.addOrRemoveQuantity }
           value="+"
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r ml-2"
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800
+           font-bold py-2 px-4 rounded-r ml-2"
         >
           +
         </button>
@@ -51,6 +57,7 @@ Quantity.propTypes = {
   availableQuantity: PropTypes.number.isRequired,
   quantity: PropTypes.number.isRequired,
   setListOfProducts: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default Quantity;

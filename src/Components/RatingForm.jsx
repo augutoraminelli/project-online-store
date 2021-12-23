@@ -26,52 +26,54 @@ class RatingForm extends Component {
   render() {
     const { message, email } = this.state;
     return (
-      <section className="bg-white shadow rounded-lg p-6 mt-4">
+      <section className="bg-white shadow rounded-lg p-6 mt-10 mb-10 w-fit">
         <form
           className="border focus-within:border-blue-500
           focus-within:text-blue-500 transition-all duration-500 relative rounded p-1"
           onSubmit={ this.handleSubmit }
         >
           <h3>Avalie esse Produto</h3>
-          <div>
-            <input
-              className="shadow appearance-none border rounded w-full
+          <div className="p-10">
+            <div>
+              <input
+                className="shadow appearance-none border rounded w-full
               py-2 px-3 text-gray-700 leading-tight
               focus:outline-none focus:shadow-outline"
-              type="email"
-              name="email"
-              required
-              placeholder="E-mail"
-              value={ email }
-              onChange={ this.handleChange }
-            />
-          </div>
-          <div>
-            <textarea
-              className="shadow appearance-none border rounded w-full py-2
+                type="email"
+                name="email"
+                required
+                placeholder="E-mail"
+                value={ email }
+                onChange={ this.handleChange }
+              />
+            </div>
+            <div>
+              <textarea
+                className="shadow appearance-none border rounded w-full py-2
               px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              data-testid="product-detail-evaluation"
-              name="message"
-              maxLength="500"
-              placeholder="Mensagem (opcional)"
-              value={ message }
-              onChange={ this.handleChange }
-            />
-          </div>
-          <div>
-            <ReactStars
-              count={ 5 }
-              onChange={ (event) => this.setState({ rating: event }) }
-              size={ 40 }
-              activeColor="#ffd700"
-            />
-          </div>
-          <input
-            className="rounded text-gray-100 px-3 py-1 bg-blue-500
+                data-testid="product-detail-evaluation"
+                name="message"
+                maxLength="500"
+                placeholder="Mensagem (opcional)"
+                value={ message }
+                onChange={ this.handleChange }
+              />
+            </div>
+            <div>
+              <ReactStars
+                count={ 5 }
+                onChange={ (event) => this.setState({ rating: event }) }
+                size={ 40 }
+                activeColor="#ffd700"
+              />
+            </div>
+            <input
+              className="rounded text-gray-100 px-3 py-1 bg-blue-500 mt-5
             hover:shadow-inner hover:bg-blue-700 transition-all duration-300"
-            type="submit"
-            value="Save"
-          />
+              type="submit"
+              value="Save"
+            />
+          </div>
         </form>
       </section>
     );

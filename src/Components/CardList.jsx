@@ -13,18 +13,19 @@ class CardList extends Component {
     event.preventDefault();
     const { target: { value } } = event;
     const { productList, changeTotalItensOfCart } = this.props;
-    let product = productList.find((item) => item.id === value);
-    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id));
-    if (productFromLocalStorage && !productFromLocalStorage.rating) {
-      product = JSON.parse(localStorage.getItem(product.id));
-      product.quantity += 1;
+    const product = productList.find((item) => item.id === value);
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id) || null);
+    if (productFromLocalStorage) {
+      productFromLocalStorage.quantity = productFromLocalStorage.quantity
+        ? productFromLocalStorage.quantity + 1 : 1;
+      productFromLocalStorage.isOnCart = true;
+      localStorage.setItem(product.id, JSON.stringify(productFromLocalStorage));
     } else {
-      product.quantity = 1;
       product.isOnCart = true;
+      product.quantity = 1;
+      product.rating = product.rating || [];
+      localStorage.setItem(product.id, JSON.stringify(product));
     }
-    localStorage.setItem(
-      product.id, JSON.stringify(product),
-    );
     changeTotalItensOfCart();
   }
 

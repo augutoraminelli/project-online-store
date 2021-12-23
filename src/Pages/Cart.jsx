@@ -27,15 +27,21 @@ class Cart extends Component {
 
   setListOfProducts() {
     const list = Object.values(localStorage);
-    const products = [];
     const filteredProducts = list.filter((product) => JSON.parse(product).isOnCart);
-    filteredProducts.map((item) => products.push(JSON.parse(item)));
+    const products = filteredProducts.map((item) => JSON.parse(item));
     this.setState({ listOfProducts: products });
     this.handleTotalPrice(products);
   }
 
   removeProduct({ target: { value } }) {
-    localStorage.removeItem(value);
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(value));
+    if (productFromLocalStorage.rating.length > 0) {
+      delete productFromLocalStorage.quantity;
+      productFromLocalStorage.isOnCart = false;
+      localStorage.setItem(value, JSON.stringify(productFromLocalStorage));
+    } else {
+      localStorage.removeItem(value);
+    }
     this.setListOfProducts();
   }
 
@@ -44,8 +50,16 @@ class Cart extends Component {
     const total = `Preço Total: R$ ${totalPrice}`;
     return (
       <main className="flex-col justify-center">
-        <BackHome className="backhome" />
+        <BackHome />
         <section className="space-y-10">
+          <div className="mb-3">
+            <h3
+              className="font-sans text-lg text-gray-800
+            text-center font-bold mb-7 mt-7"
+            >
+              {total}
+            </h3>
+          </div>
           {(listOfProducts.length === 0) ? (
             <h4 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h4>
           )
@@ -57,7 +71,7 @@ class Cart extends Component {
               >
                 <h4
                   className="font-sans
-                 italic text-lg text-gray-800 text-center truncate "
+                 italic text-lg text-gray-800 text-center mb-5"
                 >
                   { product.title }
                 </h4>
@@ -90,11 +104,6 @@ class Cart extends Component {
             ))}
         </section>
         <div className="mt-5">
-          <div className="mb-3">
-            <h3 className="font-sans text-lg text-gray-800 text-center font-bold">
-              {total}
-            </h3>
-          </div>
           <Link
             to={ {
               pathname: '/checkout',
@@ -106,8 +115,8 @@ class Cart extends Component {
               disabled={ listOfProducts.length === 0 }
               data-testid="checkout-products"
               className="bg-blue-500
-               hover:bg-blue-700
-              text-white font-bold py-2 px-4 border border-blue-700 rounded"
+               hover:bg-blue-700 disabled:opacity-10
+              text-white font-bold py-2 px-4 border border-blue-700 rounded mb-10"
             >
               Finalizar compra
             </button>

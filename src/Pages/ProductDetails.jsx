@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import BackHome from '../Components/BackHome';
 import ShoppingCart from '../Components/ShoppingCart';
 import RatingForm from '../Components/RatingForm';
@@ -16,28 +17,28 @@ export default class ProductDetails extends Component {
     this.addRating = this.addRating.bind(this);
     this.updateNumberItens = this.updateNumberItens.bind(this);
 
-    const { location: { state: { product: { id } } } } = this.props;
     this.state = {
       quantity: 1,
       updateState: false,
       numberItensUpdate: numberItens(),
-      isRating: (JSON.parse(localStorage.getItem(id))
-      && JSON.parse(localStorage.getItem(id)).rating),
     };
   }
 
   setListOfCartProducts() {
     let { location: { state: { product } } } = this.props;
     const { quantity } = this.state;
-    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id));
-    if (productFromLocalStorage && productFromLocalStorage.isOnCart) {
-      product = JSON.parse(localStorage.getItem(product.id));
-      product.quantity += quantity;
+    const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id) || null);
+    if (productFromLocalStorage) {
+      product = productFromLocalStorage;
+      product.quantity = product.quantity
+        ? product.quantity + quantity : quantity;
+      product.rating = product.rating || [];
       product.isOnCart = true;
       this.updateNumberItens();
     } else {
       product.quantity = quantity;
       product.isOnCart = true;
+      product.rating = [];
     }
     localStorage.setItem(product.id, JSON.stringify(product));
     this.updateNumberItens();
@@ -45,23 +46,23 @@ export default class ProductDetails extends Component {
 
   addRating(email, message, rating) {
     const { location: { state: { product } } } = this.props;
-    const { isRating, quantity } = this.state;
     const productFromLocalStorage = JSON.parse(localStorage.getItem(product.id))
-     || product;
-    if (isRating) {
-      productFromLocalStorage.rating = [...productFromLocalStorage.rating,
-        { email, message, rating }];
-      if (productFromLocalStorage.isOnCart) productFromLocalStorage.quantity += quantity;
-      localStorage.setItem(product.id, JSON.stringify(productFromLocalStorage));
+     || null;
+    if (productFromLocalStorage) {
+      if (productFromLocalStorage.rating.length > 0) {
+        productFromLocalStorage.rating = [{ email, message, rating },
+          ...productFromLocalStorage.rating];
+        localStorage.setItem(product.id, JSON.stringify(productFromLocalStorage));
+      } else {
+        productFromLocalStorage.rating = [{ email, message, rating }];
+        localStorage.setItem(product.id, JSON.stringify(productFromLocalStorage));
+      }
     } else {
-      productFromLocalStorage.rating = productFromLocalStorage.rating
-        ? [...productFromLocalStorage.rating, { email, message, rating }]
-        : [{ email, message, rating }];
-      localStorage.setItem(productFromLocalStorage.id,
-        JSON.stringify(productFromLocalStorage));
-      const { updateState } = this.state;
-      this.setState({ updateState: !updateState });
+      product.isOnCart = false;
+      product.rating = [{ email, message, rating }];
+      localStorage.setItem(product.id, JSON.stringify(product));
     }
+    this.setState((prev) => ({ updateState: !prev.updateState }));
   }
 
   addOrRemoveQuantity({ target: { value } }) {
@@ -78,12 +79,15 @@ export default class ProductDetails extends Component {
     const { title, price, thumbnail } = product;
     const { quantity, numberItensUpdate } = this.state;
     const productForRating = JSON.parse(localStorage.getItem(product.id));
+    console.log(productForRating);
     return (
       <section>
         <div className="header-product-detail">
           <BackHome />
-          <div>
-            <ShoppingCart NumberOfItens={ numberItensUpdate } />
+          <div className="mr-5">
+            <Link to="/cart">
+              <ShoppingCart NumberOfItens={ numberItensUpdate } />
+            </Link>
           </div>
         </div>
         <div
@@ -92,7 +96,7 @@ export default class ProductDetails extends Component {
         >
           <h4
             className="font-sans italic text-lg
-              text-gray-800 text-center"
+              text-gray-800 text-center mb-5"
           >
             {title}
           </h4>
@@ -117,9 +121,8 @@ export default class ProductDetails extends Component {
           </button>
           <div>
             <button
-              className="bg-gray-300 hover:bg-gray-400
+              className="bg-gray-300 hover:bg-gray-400 disabled:opacity-10
               text-gray-800 font-bold py-2 px-4 rounded-l mr-2 mt-4 mb-4"
-              data-testid="product-decrease-quantity"
               type="button"
               disabled={ quantity === 1 }
               onClick={ this.addOrRemoveQuantity }
@@ -129,9 +132,8 @@ export default class ProductDetails extends Component {
             </button>
             <span data-testid="shopping-cart-product-quantity">{ quantity }</span>
             <button
-              className="bg-gray-300 hover:bg-gray-400
-              text-gray-800 font-bold py-2 px-4 rounded-l ml-2 mt-4 mb-4"
-              data-testid="product-increase-quantity"
+              className="bg-gray-300 hover:bg-gray-400 disabled:opacity-10
+              text-gray-800 font-bold py-2 px-4 rounded-r ml-2 mt-4 mb-4"
               type="button"
               disabled={ quantity >= product.available_quantity }
               onClick={ this.addOrRemoveQuantity }
@@ -141,7 +143,9 @@ export default class ProductDetails extends Component {
             </button>
           </div>
         </div>
-        <RatingForm addRating={ this.addRating } />
+        <div className="flex justify-center">
+          <RatingForm addRating={ this.addRating } />
+        </div>
         <h3
           className="mb-4 text-lg font-semibold
           text-gray-900 mt-4"
@@ -151,20 +155,19 @@ export default class ProductDetails extends Component {
         <div className="space-y-4">
           {
             productForRating !== null
-            && productForRating.rating
-            && productForRating.rating.map((rating) => (
-              <div
-                className="flex-1 border rounded-lg px-4
-                py-2 sm:px-6 sm:py-4 leading-relaxed"
-                key={ rating.email }
-              >
-                <p><strong>{rating.email}</strong></p>
-                <p className="text-sm">{rating.message}</p>
-                <p>
-                  Nota:
-                  <strong>{rating.rating}</strong>
-                </p>
-              </div>))
+             && productForRating.rating.map((rating) => (
+               <div
+                 className="flex-1 border rounded-lg px-4
+                py-2 sm:px-6 sm:py-4 leading-relaxed space-y-3"
+                 key={ rating.email }
+               >
+                 <p><strong>{rating.email}</strong></p>
+                 <p className="text-sm">{rating.message}</p>
+                 <p>
+                   Nota:
+                   <strong>{rating.rating}</strong>
+                 </p>
+               </div>))
           }
         </div>
       </section>
