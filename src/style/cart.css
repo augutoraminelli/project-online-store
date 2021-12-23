@@ -16,20 +16,19 @@
   width: 500px;
 }
 
-
-.form-checkout {  
-  width: fit-content;
+.form-checkout {
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   margin: auto;
+  width: fit-content;
 }
 
 .payment-check {
-  width: fit-content;
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: auto;
+  width: fit-content;
 }
