@@ -1,1 +1,1 @@
-# Application https://project-online-store.vercel.app/
+# Application: https://project-online-store.vercel.app/
